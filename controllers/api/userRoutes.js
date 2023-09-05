@@ -26,21 +26,21 @@ router.post('/login', async (req, res) => {
     });
         
             if (!userData) {
-                res.status(400).json({ message: 'Invalid email address' });
+                res.status(400).json({ message: 'Invalid email address, try again' });
                 return;
             }
 
             const validPassword = await userData.checkPassword(req.body.password);
 
             if (!validPassword) {
-                res.status(400).json({ message: 'Invalid password' });
+                res.status(400).json({ message: 'Invalid password, try again' });
                 return;
             }
 
             req.session.save(() => {
                 req.session.user_id = userData.id;
                 req.session.loggedIn = true;
-                res.json({ user: userData, message: 'You are logged in!' });
+                res.json({ user: userData, message: 'You are logged in now!' });
             })
     } 
     catch (err) {
