@@ -1,19 +1,15 @@
-<h2>Sign Up here</h2>
-<form id="signupForm">
-    <div class="mb-3">
-        <label for="inputUsername" class="form-label">Username here</label>
-        <input type="text" class="form-control" id="inputUsername">
+<div class="card">
+  <div class="card-header flex-row justify-space-between">
+    <h2>Signup</h2>
+  </div>
+  <form class="card-body" id="signup-form">
+    <input class="form-input" type="text" placeholder="Username" id="username-input-signup">
+    <input class="form-input" type="password" placeholder="Password" id="password-input-signup">
+    <br>
+    <div class="flex-row justify-space-between">
+      <button class="btn"><a href="/login">Have an account? Login</a></button>
+      <button class="btn">Submit</button>
     </div>
-    <div class="mb-3">
-        <label for="inputEmail" class="form-label">Email address here</label>
-        <input type="email" class="form-control" id="inputEmail">
-        <div id="emailHelp" class="form-text">Please know we'll never share your email with anyone else.</div>
-    </div>
-    <div class="mb-3">
-        <label for="inputPassword" class="form-label">Password here</label>
-        <input type="password" class="form-control" id="inputPassword">
-    </div>
-    <button type="submit" class="btn btn-primary">Submit here</button>
-</form>
-
-<script src="../public/js/signup.js"></script>
+  </form>
+</div>
+<script src="/js/signup.js"></script>

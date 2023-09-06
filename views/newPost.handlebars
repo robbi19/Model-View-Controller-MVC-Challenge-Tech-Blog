@@ -1,14 +1,17 @@
-<h3>New Post here</h3>
-<form id="newPost">
-<div class="mb-3">
-    <label for="inputTitle" class="form-label">Title here</label>
-    <input type="text" class="form-control" name="postTitle" id="inputTitle" placeholder="Title">
+<div class="card">
+  <div class="card-header flex-row justify-space-between">
+    <h2>New Post</h2>
+  </div>
+  <form class="card-body" id="new-post-form">
+    <label class="form-label">Title:</label>
+    <input class="form-input" type="text" name="post-title"/>
+    <br>
+    <label class="form-label">Content:</label>
+    <textarea class="form-input" name="post-body"></textarea>
+    <br>
+    <div class="flex-row justify-center">
+      <button class="btn">Submit</button>
+    </div>
+  </form>
 </div>
-<div class="mb-3">
-    <label for="inputContent" class="form-label">Post here</label>
-    <textarea class="form-control" name="postContent" id="inputContent" rows="3"></textarea>
-</div>
-<button type="submit" class="btn btn-primary">Submit here</button>
-</form>
-
-<script src="../public/js/newPost.js"></script>
+<script src="/js/new.js"></script>

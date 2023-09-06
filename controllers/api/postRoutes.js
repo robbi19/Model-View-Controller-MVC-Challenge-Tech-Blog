@@ -1,73 +1,52 @@
 const router = require('express').Router();
-const { Post } = require('../../models');
+const { Post } = require('../../models/');
 const withAuth = require('../../utils/auth');
 
 router.post('/', withAuth, async (req, res) => {
-    try {
-        const newPostData = await Post.create({
-            ...req.body,
-            user_id: req.session.user_id
-        });
+  const body = req.body;
 
-        res.status(200).json(newPostData);
-
-    }
-    catch (err) {
-        console.log(err);
-        res.status(500).json(err);
-    };
+  try {
+    const newPost = await Post.create({ ...body, userId: req.session.userId });
+    res.json(newPost);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 router.put('/:id', withAuth, async (req, res) => {
-    try {
-        const updatePostData = await Post.update(
-            {
-                title: req.body.title,
-                content: req.body.content
-            },
-            {
-                where: {
-                    id: req.params.id
-                }
-            }
-        );
+  try {
+    const [affectedRows] = await Post.update(req.body, {
+      where: {
+        id: req.params.id,
+      },
+    });
 
-        if (!updatePostData) {
-            res.status(404).json({ message: 'Invalid ID' });
-            return;
-        } else {
-            res.status(200).json(updatePostData)
-        };
-
+    if (affectedRows > 0) {
+      res.status(200).end();
+    } else {
+      res.status(404).end();
     }
-    catch (err) {
-        console.log(err);
-        res.status(400).json(err);
-    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 router.delete('/:id', withAuth, async (req, res) => {
-    try {
-        const deletePostData = await Post.destroy(
-            {
-                where: {
-                    id: req.params.id
-                }
-            }
-        );
+  try {
+    const [affectedRows] = Post.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
 
-        if (!deletePostData) {
-            res.status(404).json({ message: 'Invalid ID' });
-            return;
-        } else {
-            res.json(deletePostData)
-        };
-
+    if (affectedRows > 0) {
+      res.status(200).end();
+    } else {
+      res.status(404).end();
     }
-    catch (err) {
-        console.log(err);
-        res.json(err);
-    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 module.exports = router;

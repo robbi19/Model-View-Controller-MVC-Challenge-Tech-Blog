@@ -1,0 +1,19 @@
+<div class="card">
+  <div class="card-header flex-row justify-space-between">
+    <h2>Edit Post</h2>
+  </div>
+  <form class="card-body" id="edit-post-form">
+    <input type="hidden" name="post-id" value="{{post.id}}"/>
+    <label class="form-label">Title:</label>
+    <input class="form-input" type="text" name="post-title" value="{{post.post_title}}"/>
+    <br>
+    <label class="form-label">Content:</label>
+    <textarea class="form-input" name="post-body">{{post.post_body}}</textarea>
+    <br>
+    <div class="flex-row justify-space-between">
+      <button class="btn" id="delete-btn">Delete</button>
+      <button class="btn">Update</button>
+    </div>
+  </form>
+</div>
+<script src="/js/edit.js"></script>

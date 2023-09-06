@@ -1,109 +1,61 @@
-const router = require("express").Router();
-const { User, Post, Comment } = require("../models");
+const router = require('express').Router();
+const { Post, Comment, User } = require('../models/');
 
+// get all posts for homepage
 router.get('/', async (req, res) => {
-    try {
-        const postData = await Post.findAll({
-            attributes: [
-                'id',
-                'title',
-                'content',
-                'date_created',
-            ],
-            include: [
-                {
-                    model: User,
-                    attributes: ['username']
-                },
-                {
-                    model: Comment,
-                    attributes: [
-                        'id',
-                        'content',
-                        'post_id',
-                        'user_id',
-                    ],
-                    include: {
-                        model: User,
-                        attributes: ['username']
-                    }
-                }
-            ]
-        })
-
-        const allPosts = postData.map(post => post.get({ plain: true }));
-        res.render('homepage', {
-            allPosts
-        });
-    }
-    catch (err) {
-        console.log(err);
-        res.status(500).json(err);
-    }
-
+  try {
+    const postData = await Post.findAll({
+      include: [User],
+    });
+    // serialize the data
+    const posts = postData.map((post) => post.get({ plain: true }));
+    res.render('all-posts', { posts });
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
+// get single post
 router.get('/post/:id', async (req, res) => {
-    try {
-        const postData = await Post.findOne({
-            where: {
-                id: req.params.id
-            },
-            attributes: [
-                'id',
-                'title',
-                'content',
-                'date_created',
-            ],
-            include: [
-                {
-                    model: User,
-                    attributes: [
-                        'username'
-                    ]
-                },
-                {
-                    model: Comment,
-                    attributes: [
-                        'id',
-                        'content',
-                        'post_id',
-                        'user_id',
-                    ],
-                    include: {
-                        model: User,
-                        attributes: [
-                            'username'
-                        ]
-                    }
-                }
-            ]
-        })
-        const post = postData.get({ plain: true });
-        res.render('single-post', {
-            post
-        });
+  try {
+    const postData = await Post.findByPk(req.params.id, {
+      include: [
+        User,
+        {
+          model: Comment,
+          include: [User],
+        },
+      ],
+    });
+
+    if (postData) {
+      // serialize the data
+      const post = postData.get({ plain: true });
+      res.render('single-post', { post });
+    } else {
+      res.status(404).end();
     }
-    catch (err) {
-        console.log(err);
-        res.status(500).json(err);
-    };
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 router.get('/login', (req, res) => {
-    if (req.session.loggedIn) {
-        res.redirect('/');
-        return;
-    }
-    res.render('login');
+  if (req.session.loggedIn) {
+    res.redirect('/');
+    return;
+  }
+
+  res.render('login');
 });
 
 router.get('/signup', (req, res) => {
-    if (req.session.loggedIn) {
-        res.redirect('/dashboard');
-        return;
-    }
-    res.render('signup');
+  if (req.session.loggedIn) {
+    res.redirect('/');
+    return;
+  }
+
+  res.render('signup');
 });
 
 module.exports = router;
